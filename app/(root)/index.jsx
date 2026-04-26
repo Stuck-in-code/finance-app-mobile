@@ -56,10 +56,7 @@ export default function Page() {
       { text: "Logout", style: "destructive", onPress: signOut },
     ]);
   };
-  console.log(user.id);
-  console.log(summary.income);
-  console.log(summary.expense);
-  console.log(summary.balance);
+  
   if (isLoading && !refreshing) return <PageLoader />;
   return (
     <View style={styles.container}>

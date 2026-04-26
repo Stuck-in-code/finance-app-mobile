@@ -15,6 +15,7 @@ import {
 import { styles } from "../../assets/auth.styles.js";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors.js";
+import PageLoader from "../../components/PageLoader.jsx";
 
 export default function Page() {
   const { signIn, errors, fetchStatus } = useSignIn();
@@ -24,8 +25,10 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const { error } = await signIn.password({
       emailAddress,
       password,
@@ -69,7 +72,10 @@ export default function Page() {
       // Check why the sign-in is not complete
       console.error("Sign-in attempt not complete:", signIn);
     }
+    setIsLoading(false);
   };
+
+  if (isLoading) return <PageLoader />;
 
   const handleVerify = async () => {
     await signIn.mfa.verifyEmailCode({ code });
@@ -189,7 +195,9 @@ export default function Page() {
           keyboardType="email-address"
         />
         {errors.fields.identifier && (
-          <Text style={styles.error}>{setError(errors.fields.identifier.message)}</Text>
+          <Text style={styles.error}>
+            {setError(errors.fields.identifier.message)}
+          </Text>
         )}
         <Text style={styles.label}>Password</Text>
         <TextInput
@@ -201,7 +209,9 @@ export default function Page() {
           onChangeText={(password) => setPassword(password)}
         />
         {errors.fields.password && (
-          <Text style={styles.error}>{setError(errors.fields.password.message)}</Text>
+          <Text style={styles.error}>
+            {setError(errors.fields.password.message)}
+          </Text>
         )}
         <Pressable
           style={({ pressed }) => [
@@ -225,7 +235,9 @@ export default function Page() {
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>Don't have an account? </Text>
           <Link href="/sign-up">
-            <Text type="link" style={styles.linkText}>Sign up</Text>
+            <Text type="link" style={styles.linkText}>
+              Sign up
+            </Text>
           </Link>
         </View>
       </View>
